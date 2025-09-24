@@ -18,3 +18,9 @@ interface ProductDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertProduct(product: Product)
     
+    @Query("SELECT * FROM products WHERE lastSyncAt = 0 OR updatedAt > lastSyncAt")
+    suspend fun getProductsForSync(): List<Product>
+
+    @Query("UPDATE products SET lastSyncAt = :syncTime WHERE kodeBarang = :kodeBarang")
+    suspend fun updateSyncTime(kodeBarang: String, syncTime: Long)
+    
