@@ -14,4 +14,13 @@ interface UserDao {
     
     @Query("UPDATE users SET isActive = 0 WHERE id = :userId")
     suspend fun deactivateUser(userId: String)
+    
+    @Query("SELECT * FROM users WHERE lastSyncAt = 0 OR updatedAt > lastSyncAt")
+suspend fun getUsersForSync(): List<User>
+
+@Query("SELECT * FROM users WHERE id = :id")
+suspend fun getUserById(id: String): User?
+
+@Query("UPDATE users SET lastSyncAt = :syncTime WHERE id = :id")
+suspend fun updateSyncTime(id: String, syncTime: Long)
 }
