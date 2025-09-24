@@ -26,4 +26,16 @@ interface TransactionDao {
     
     @Query("UPDATE transactions SET paymentStatus = 'PAID', paidAt = :paidAt WHERE id = :transactionId")
     suspend fun markAsPaid(transactionId: String, paidAt: Long)
+    
+    @Query("SELECT * FROM transactions WHERE lastSyncAt = 0")
+suspend fun getTransactionsForSync(): List<Transaction>
+
+@Query("SELECT * FROM transactions WHERE id = :id")
+suspend fun getTransactionById(id: String): Transaction?
+
+@Query("SELECT * FROM transactions WHERE createdAt BETWEEN :startDate AND :endDate")
+suspend fun getTransactionsByDateRangeSync(startDate: Long, endDate: Long): List<Transaction>
+
+@Query("UPDATE transactions SET lastSyncAt = :syncTime WHERE id = :id")
+suspend fun updateSyncTime(id: String, syncTime: Long)
 } 
