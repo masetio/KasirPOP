@@ -23,4 +23,6 @@ interface ProductDao {
 
     @Query("UPDATE products SET lastSyncAt = :syncTime WHERE kodeBarang = :kodeBarang")
     suspend fun updateSyncTime(kodeBarang: String, syncTime: Long)
+}
+    
     
